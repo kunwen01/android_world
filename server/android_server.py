@@ -19,6 +19,7 @@ and manage task execution on AndroidWorld tasks.
 """
 
 import contextlib
+import os
 import typing
 from typing import Any
 
@@ -31,6 +32,8 @@ import fastapi
 import pydantic
 import uvicorn
 
+from dotenv import load_dotenv
+load_dotenv()  # 加载 .env 文件中的变量
 
 class StateResponse(pydantic.BaseModel):
   """Pydantic model for state responses, including pixels and UI elements."""
@@ -46,7 +49,7 @@ async def lifespan(fast_api_app: fastapi.FastAPI):
       console_port=5554,
       emulator_setup=True,
       freeze_datetime=True,
-      adb_path="/opt/android/platform-tools/adb",
+      adb_path=os.getenv("ADB_PATH",  "/opt/android/platform-tools/adb"),
   )
   task_registry = aw_registry_module.TaskRegistry()
   aw_registry = task_registry.get_registry(task_registry.ANDROID_WORLD_FAMILY)

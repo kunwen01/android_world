@@ -34,6 +34,8 @@ from android_world.env import env_launcher
 from android_world.task_evals import task_eval
 
 logging.set_verbosity(logging.WARNING)
+from dotenv import load_dotenv
+load_dotenv()
 
 os.environ['GRPC_VERBOSITY'] = 'ERROR'  # Only show errors
 os.environ['GRPC_TRACE'] = 'none'  # Disable tracing
@@ -42,8 +44,8 @@ os.environ['GRPC_TRACE'] = 'none'  # Disable tracing
 def _find_adb_directory() -> str:
   """Returns the directory where adb is located."""
   potential_paths = [
-      os.path.expanduser('~/Library/Android/sdk/platform-tools/adb'),
-      os.path.expanduser('~/Android/Sdk/platform-tools/adb'),
+      os.path.expanduser(os.getenv("ADB_PATH",  "~/Library/Android/sdk/platform-tools/adb")),
+      os.path.expanduser(os.getenv("ADB_PATH",  "~/Android/Sdk/platform-tools/adb")),
   ]
   for path in potential_paths:
     if os.path.isfile(path):
